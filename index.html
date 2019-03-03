@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Drupal Security Learnings</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/white.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+		integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+		crossorigin="anonymous"></script>
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-markdown>
+				<textarea data-template>
+				# Drupal security learnings
+
+				Klaus Purer, [jobiqo.com](https://www.jobiqo.com)
+
+				[<i class="fab fa-mastodon"></i> klausi@mastodon.social](https://mastodon.social/@klausi)
+
+				[<i class="fab fa-twitter"></i> \_klausi\_](https://twitter.com/_klausi_)
+
+				Drupal Austria Meetup March 2019
+				</textarea>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template>
+				## 2014: Drupalgeddon
+
+				SQL injection in the database abstraction layer
+
+				Attack:
+				```php
+				$post_data = "name[0%20;update+users+set+name%3D'admin'"
+				  . "+,+pass+%3d+'"
+				  . urlencode('$S$CTo9G7Lx2rJENglhirA8oi7v9LtLYWFrGm.F.0Jurx3aJAmSJ53g')
+				  . "'+where+uid+%3D+'1';;#%20%20]=test3&name[0]=test"
+				  . "&pass=test&test2=test&form_build_id="
+				  . "&form_id=user_login_block&op=Log+in";
+				```
+				</textarea>
+				<aside class="notes" data-markdown>
+				* Catastrophic SQL injection vulnerability
+				* Exploitable as anonymous users
+				* Attacks started as early as 6 hours after the security release
+				* SQL injection in Drupal automatically means remote code execution
+				* The release was exactly on the day of a Drupal Austria meetup :-) I remember walking in
+				  and asking people if they updated already
+				* Simply patching Drupal later is not enough - a hacked site needs to be restored from backup
+				  on a new server
+				* Fun fact:
+				</aside>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template>
+				## Drupalgeddon learnings
+
+				* Learning 1: Highly critical updates are announced. Be on call to apply them!
+				* Learning 2: database table prefix against SQL injection
+				* Learning 3: Validate user provided data as strictly as possible!
+				* Learning 4: Set secure file permissions, then attackers cannot overwrite PHP files or upload PHP shells
+				* Learning 5: Never build a DB abstraction layer yourself, it dangerous.
+				</textarea>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template>
+				## 2018: Render array code execution SA-CORE-2018-002
+
+
+				</textarea>
+				<aside class="notes" data-markdown>
+				* Also called Drupalgeddon 2
+				</aside>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template>
+				## Render array vulnerability learnings
+
+				* Don't mix control flow and user data
+
+				</textarea>
+			</section>
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js' },
+				{ src: 'plugin/markdown/markdown.js' },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } }
+			]
+		});
+	</script>
+</body>
+
+</html>
