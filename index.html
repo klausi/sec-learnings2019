@@ -80,6 +80,13 @@
 				* Learning 1: Highly critical updates are announced. Be on call to apply them!
 				* Learning 2: database table prefix against SQL injection
 				* Learning 3: Validate user provided data as strictly as possible!
+				</textarea>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template data-separator-notes="^Note:">
+				## Drupalgeddon learnings (2)
+
 				* Learning 4: Set secure file permissions, then attackers cannot overwrite PHP files or upload PHP shells
 				* Learning 5: Never build a DB abstraction layer yourself, it dangerous.
 				</textarea>
@@ -199,9 +206,78 @@
 			</section>
 
 			<section data-markdown>
-				<textarea data-template>
+				<textarea data-template data-separator-notes="^Note:">
 				## PHP language fails
 
+				Access Bypass because of a typo
+
+				```php
+				function checkSharedKey($shared_key) {
+					if (strlen($shared_key) != 32) {
+						return false;
+					}
+					if (trim($shared_key) == "") {
+						return flase;
+					}
+				…
+				}
+				```
+				<pre>
+				Warning: Use of undefined constant flase - assumed 'flase'
+				(this will throw an Error in a future version of PHP)
+				</pre>
+
+				Note:
+				* Example source: https://medium.com/@DanielC7/remote-code-execution-gaining-domain-admin-privileges-due-to-a-typo-dbf8773df767
+				* PHP issues a warning, but the function will return a truthy value
+				* If you don't compare that with "===" then you get an access bypass
+				</textarea>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template data-separator-notes="^Note:">
+				## PHP type hinting as security protection
+
+				Use declare() and a return type hint:
+
+				```php
+				declare(strict_types=1);
+
+				function checkSharedKey($shared_key): bool {
+					if (strlen($shared_key) != 32) {
+						return false;
+					}
+					if (trim($shared_key) == "") {
+						return flase;
+					}
+				…
+				}
+				```
+				<pre>
+				Fatal error: Uncaught TypeError: Return value of checkSharedKey()
+				must be of the type bool, string returned
+				</pre>
+
+				Note:
+				* Instead of a warning we get a fatal error now with this
+				* code execution will stop and the typo cannot be exploited.
+				</textarea>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template data-separator-notes="^Note:">
+				## PHP language learnings
+
+				* Learning 9: Use type hints and `declare(strict_types=1)`
+				whenever possible
+				</textarea>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template data-separator-notes="^Note:">
+				## Thank you!
+
+				Any questions?
 				</textarea>
 			</section>
 		</div>
