@@ -69,7 +69,6 @@
 				and asking people if they updated already
 				* Simply patching Drupal later is not enough - a hacked site needs to be restored from backup
 				on a new server
-				* Fun fact:
 				</textarea>
 			</section>
 
@@ -78,7 +77,7 @@
 				## Drupalgeddon learnings
 
 				* Learning 1: Highly critical updates are announced. Be on call to apply them!
-				* Learning 2: database table prefix against SQL injection
+				* Learning 2: Web Application firewalls can filter attacks
 				* Learning 3: Validate user provided data as strictly as possible!
 				</textarea>
 			</section>
@@ -123,6 +122,7 @@
 				## Render array vulnerability learnings
 
 				* Learning 6: Don't mix control flow and user data
+				* Learning 7: Security needs to be designed from the start
 
 
 				Note:
@@ -147,7 +147,7 @@
 					"link": [
 						{
 							"value": "link",
-							"options": "<evil unseralize() payload>"
+							"options": "<evil serialized payload>"
 						}
 					],
 					"_links": {
@@ -175,7 +175,7 @@
 				. "{s:32:\"\u0000GuzzleHttp\\HandlerStack\u0000handler\";"
 				. "s:12:\"echo HACKED!\";"
 				. "s:30:\"\u0000GuzzleHttp\\HandlerStack\u0000stack\";"
-				. "a:1:{i:0;a:1:{i:0;s:6:\"system\";}}"
+				. "a:1:{i:0;a:1:{i:0;s:8:\"passthru\";}}"
 				. "s:31:\"\u0000GuzzleHttp\\HandlerStack\u0000cached\";"
 				. "b:0;}i:1;"
 				. "s:7:\"resolve\";}}s:9:\"_fn_close\";"
@@ -192,16 +192,18 @@
 				<textarea data-template data-separator-notes="^Note:">
 				## unserialize() vulnerability learnings
 
-				* Learning 7: never pass user provided data to unserialize().
+				* Learning 8: never pass user provided data to unserialize().
 				Mitigation:
 				```php
 				unserialize($values, ['allowed_classes' => FALSE]);
 				```
-				* Learning 8: Defense in depth: Disable unused functionality to reduce
+				* Learning 9: Defense in depth: Disable unused functionality to reduce
 				attack surface
 
 				Note:
 				* the 'allowed_classes' parameter only exists since PHP 7.
+				* I expect that REST API vulnerabilties will be more common in the
+				future as more and more people use it for decoupled sites and apps.
 				</textarea>
 			</section>
 
@@ -268,7 +270,7 @@
 				<textarea data-template data-separator-notes="^Note:">
 				## PHP language learnings
 
-				* Learning 9: Use type hints and `declare(strict_types=1)`
+				* Learning 10: Use type hints and `declare(strict_types=1)`
 				whenever possible
 				</textarea>
 			</section>
