@@ -88,6 +88,9 @@
 
 				* Learning 4: Set secure file permissions, then attackers cannot overwrite PHP files or upload PHP shells
 				* Learning 5: Never build a DB abstraction layer yourself, it dangerous.
+
+				Note:
+				* Secure file permissions: https://www.drupal.org/node/244924
 				</textarea>
 			</section>
 
@@ -160,6 +163,7 @@
 
 				Note:
 				* Only exploitable if REST module and REST resources enabled
+				* Serialization is used to convert PHP objects or arrays into strings
 				</textarea>
 			</section>
 
@@ -185,6 +189,10 @@
 				Note:
 				* Source: https://www.ambionics.io/blog/drupal8-rce
 				* PHPGGC: https://github.com/ambionics/phpggc
+				* Exploit: attacker hides `passthru("echo Hacked!")` as callback in the serialized string
+				* Needs an existing class such as FnStream here with a destructor __destruct()
+				* When the object runs out of scope and is garbage collected.
+				* The destructor is executed with the evil callback
 				</textarea>
 			</section>
 
@@ -202,7 +210,7 @@
 
 				Note:
 				* the 'allowed_classes' parameter only exists since PHP 7.
-				* I expect that REST API vulnerabilties will be more common in the
+				* I expect that REST API vulnerabilities will be more common in the
 				future as more and more people use it for decoupled sites and apps.
 				</textarea>
 			</section>
